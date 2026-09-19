@@ -19,8 +19,7 @@
  
 ![CA004 does not apply to regular employee](../screenshots/ca004-employee-not-applied.png)
 
-- `CA004-policy.json` — exported policy definition
-
+- [CA004-policy.json](../policies/CA004-policy.json) — exported policy definition
 **Business takeaway (1–2 sentences for the README/LinkedIn):**
 
 Even if an admin's password and regular MFA are phished, this policy prevents sign-in without a phishing-resistant method.
