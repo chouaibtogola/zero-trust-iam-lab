@@ -13,8 +13,8 @@
 **Actual result:**   Conditional Access: CA004 enforced
 
 **Evidence:**
-- `../screenshots/ca004-admin-applies.png` for the admin user
-- `../screenshots/ca004-employee-not-applied.png`  for any regular user other than admin group
+- `screenshots/ca004-admin-applies.png` for the admin user
+- `screenshots/ca004-employee-not-applied.png`  for any regular user other than admin group
 - `CA004-policy.json` — exported policy definition
 
 **Business takeaway (1–2 sentences for the README/LinkedIn):**
