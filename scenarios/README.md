@@ -17,8 +17,8 @@
  for the admin user
 
  
-../screenshots/ca004-employee-not-applied.png
-for any regular user other than admin group
+![CA004 does not apply to regular employee](../screenshots/ca004-employee-not-applied.png)
+
 - `CA004-policy.json` — exported policy definition
 
 **Business takeaway (1–2 sentences for the README/LinkedIn):**
