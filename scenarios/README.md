@@ -13,7 +13,10 @@
 **Actual result:**   Conditional Access: CA004 enforced
 
 **Evidence:**
-- screenshots/ca004-admin-applies.png for the admin user
+<img width="1905" height="875" alt="image" src="https://github.com/user-attachments/assets/a726716f-3e9d-43db-bb66-9b8427b3bcca" />
+ for the admin user
+
+ 
 - ../screenshots/ca004-employee-not-applied.png  for any regular user other than admin group
 - `CA004-policy.json` — exported policy definition
 
