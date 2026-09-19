@@ -17,7 +17,7 @@
  for the admin user
 
  
-https://github.com/chouaibtogola/zero-trust-iam-lab/blob/2f1a73759a654d42309be1f4052712cadc8cbea0/screenshots/ca004-employee-not-applied.png 
+../screenshots/ca004-employee-not-applied.png
 for any regular user other than admin group
 - `CA004-policy.json` — exported policy definition
 
