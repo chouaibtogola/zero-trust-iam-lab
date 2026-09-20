@@ -13,8 +13,8 @@
 **Actual result:** Report-only mode showed "Report-only: Failure" for this user (would have been blocked). After switching CA001 to On, signing in as this user triggered a live "more information required" prompt, forcing MFA registration before access was granted.
 
 **Evidence:**
-- `[your CA001 sign-in log screenshot filename]` — sign-in log, Conditional Access tab
-- `[your CA001 MFA prompt screenshot filename]` — live MFA registration challenge screen
+- <img width="1272" height="823" alt="image" src="https://github.com/user-attachments/assets/030d66de-8476-41e4-ae61-ebbd5ac459f4" />
+ sign-in log, Conditional Access tab
 - `CA001-policy.json` — exported policy definition
 
 ![CA001 sign-in log](../screenshots/REPLACE-WITH-YOUR-FILENAME.png)
