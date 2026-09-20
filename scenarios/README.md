@@ -17,8 +17,7 @@
  sign-in log, Conditional Access tab
 - `CA001-policy.json` — exported policy definition
 
-![CA001 sign-in log](../screenshots/REPLACE-WITH-YOUR-FILENAME.png)
-![CA001 MFA prompt](../screenshots/REPLACE-WITH-YOUR-FILENAME.png)
+
 
 **Business takeaway:**
 Requiring MFA tenant-wide closes the single most common gap exploited in real breaches — a stolen or guessed password with nothing else standing in the way.
@@ -44,8 +43,7 @@ Requiring MFA tenant-wide closes the single most common gap exploited in real br
 - `[your CA002 browser-unaffected screenshot filename]` — What-If result, browser
 - `CA002-policy.json` — exported policy definition (if you have this exported; if not, note it as pending)
 
-![CA002 blocks legacy client](../screenshots/REPLACE-WITH-YOUR-FILENAME.png)
-![CA002 does not affect browser sign-in](../screenshots/REPLACE-WITH-YOUR-FILENAME.png)
+![CA002 blocks legacy client](../screenshots/ca002-legacy-blocked.png)
 
 **Business takeaway:**
 Legacy protocols can only send a username and password — there's no mechanism for them to respond to an MFA challenge — making them a favorite target for credential-stuffing attacks. Blocking them outright, rather than trying to "challenge" them, is the only meaningful control.
