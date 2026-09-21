@@ -99,9 +99,7 @@ After completing MFA registration and fully landing as a redeemed guest, a secon
 **Takeaway:** Conditional Access evaluation for guests can differ depending on which stage of the B2B redemption flow they're in — a policy scoped to "Guest or external users" may not evaluate identically during the invitation-acceptance step itself versus a normal resource sign-in afterward. Worth testing against a fully-redeemed guest, not just the initial invite acceptance, to get an accurate picture of enforcement.
 
 **Evidence:**
-- `ca008-guest-report-only-success.png` — Conditional Access tab, My Apps sign-in, CA008 = Report-only: Success
-- `CA008-policy.json` — exported policy definition
-
+- [CA008-policy.json](../policies/CA008-policy.json) — exported policy definition
 ![CA008 evaluates successfully for a redeemed guest](../screenshots/ca008-guest-report-only-success.png)
 
 ---
@@ -121,8 +119,7 @@ After completing MFA registration and fully landing as a redeemed guest, a secon
 **Actual result:** What-If confirmed CA005 under "Policies that will apply" with grant control "Block access" for the untrusted-IP simulation, and under "Policies that will not apply" for the trusted-IP simulation.
 
 **Evidence:**
-- `CA005-policy.json` — exported policy definition
-
+[CA005-policy.json](../policies/CA005-policy.json) — exported policy definition
 ![CA005 blocks sign-in from an untrusted location](../screenshots/ca005-untrusted-blocked.png)
 ![CA005 does not affect sign-in from a trusted location](../screenshots/ca005-trusted-allowed.png)
 
