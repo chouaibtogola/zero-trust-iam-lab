@@ -26,7 +26,7 @@ One core aspect of Identity and Access Management is the Zero-Trust. Most breach
 | CA002 – Legacy authentication blocking | ✅ |
 | CA003 – Device compliance requirements | ⏳ |
 | CA004 – Phishing-resistant auth for privileged accounts | ⏳ |
-| CA005 – Untrusted location blocking | ⏳ |
+| CA005 – Untrusted location blocking | ✅ |
 | CA006/CA007 – Risk-based sign-in policies (Identity Protection) | ⏳ |
 | CA008 – Guest/external user restrictions | ✅ |
 | Break-glass emergency access accounts | ✅ |
