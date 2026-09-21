@@ -75,8 +75,7 @@ Legacy protocols can only send a username and password — there's no mechanism 
 
 Even if an admin's password and regular MFA are phished, this policy prevents sign-in without a phishing-resistant method.
 This closes a gap where privileged accounts, if compromised via phishing, could otherwise authenticate with a simple SMS code. Requiring phishing-resistant MFA for Tier0 admins removes that path entirely.
-<<<<<<< HEAD
-=======
+
 
 ------------
 ## Scenario 4 — Guest restricted, with a redemption-flow detour
@@ -104,5 +103,30 @@ After completing MFA registration and fully landing as a redeemed guest, a secon
 - `CA008-policy.json` — exported policy definition
 
 ![CA008 evaluates successfully for a redeemed guest](../screenshots/ca008-guest-report-only-success.png)
+
+---
+## Scenario 5 — Sign-in blocked from untrusted location, unaffected from trusted location
+
+**Policy:** CA005 - Block sign-in from untrusted locations
+**Date tested:** 2026-09-21
+**Objective:** Demonstrates that sign-ins from outside a defined set of trusted countries are blocked outright, while sign-ins from trusted countries remain unaffected.
+
+**Setup:**
+- Named locations configured: "Trusted Countries" (company's actual country of operation) and "Common Attack Origin Countries" (used for simulation purposes only)
+- Simulated via the Conditional Access What-If tool
+- Test 1: IP address resolving to a country outside Trusted Countries
+- Test 2: IP address resolving to a country inside Trusted Countries
+
+**Expected result:** Untrusted-location sign-in blocked; trusted-location sign-in unaffected
+**Actual result:** What-If confirmed CA005 under "Policies that will apply" with grant control "Block access" for the untrusted-IP simulation, and under "Policies that will not apply" for the trusted-IP simulation.
+
+**Evidence:**
+- `CA005-policy.json` — exported policy definition
+
+![CA005 blocks sign-in from an untrusted location](../screenshots/ca005-untrusted-blocked.png)
+![CA005 does not affect sign-in from a trusted location](../screenshots/ca005-trusted-allowed.png)
+
+**Business takeaway:**
+Location-based blocking adds a layer of defense against credential theft or account takeover attempts originating from regions with no legitimate business reason to access company systems — a common pattern in real-world attacks using stolen credentials from unrelated breaches.
 
 ---
