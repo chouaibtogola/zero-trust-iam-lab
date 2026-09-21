@@ -15,7 +15,6 @@
 **Evidence:**
 - <img width="1272" height="823" alt="image" src="https://github.com/user-attachments/assets/030d66de-8476-41e4-ae61-ebbd5ac459f4" />
  sign-in log, Conditional Access tab
-- `CA001-policy.json` — exported policy definition
 
 
 
@@ -39,9 +38,9 @@ Requiring MFA tenant-wide closes the single most common gap exploited in real br
 **Actual result:** What-If confirmed CA002 under "Policies that will apply" with grant control "Block access" for the legacy client simulation, and under "Policies that will not apply" for the browser simulation.
 
 **Evidence:**
-- `[your CA002 legacy-blocked screenshot filename]` — What-If result, legacy client
-- `[your CA002 browser-unaffected screenshot filename]` — What-If result, browser
-- `CA002-policy.json` — exported policy definition (if you have this exported; if not, note it as pending)
+<img width="1509" height="824" alt="image" src="https://github.com/user-attachments/assets/0c74578a-1376-4cd2-8281-f07f3b6c9de3" />
+ What-If result, legacy client
+
 
 ![CA002 blocks legacy client](../screenshots/ca002-legacy-blocked.png)
 
