@@ -14,7 +14,6 @@
 **Evidence:**
 - <img width="1272" height="823" alt="image" src="https://github.com/user-attachments/assets/030d66de-8476-41e4-ae61-ebbd5ac459f4" />
  sign-in log, Conditional Access tab
-- `CA001-policy.json` — exported policy definition
 
 
 
@@ -38,9 +37,9 @@ Requiring MFA tenant-wide closes the single most common gap exploited in real br
 **Actual result:** What-If confirmed CA002 under "Policies that will apply" with grant control "Block access" for the legacy client simulation, and under "Policies that will not apply" for the browser simulation.
 
 **Evidence:**
-- `[your CA002 legacy-blocked screenshot filename]` — What-If result, legacy client
-- `[your CA002 browser-unaffected screenshot filename]` — What-If result, browser
-- `CA002-policy.json` — exported policy definition (if you have this exported; if not, note it as pending)
+<img width="1509" height="824" alt="image" src="https://github.com/user-attachments/assets/0c74578a-1376-4cd2-8281-f07f3b6c9de3" />
+ What-If result, legacy client
+
 
 ![CA002 blocks legacy client](../screenshots/ca002-legacy-blocked.png)
 
@@ -99,9 +98,7 @@ After completing MFA registration and fully landing as a redeemed guest, a secon
 **Takeaway:** Conditional Access evaluation for guests can differ depending on which stage of the B2B redemption flow they're in — a policy scoped to "Guest or external users" may not evaluate identically during the invitation-acceptance step itself versus a normal resource sign-in afterward. Worth testing against a fully-redeemed guest, not just the initial invite acceptance, to get an accurate picture of enforcement.
 
 **Evidence:**
-- `ca008-guest-report-only-success.png` — Conditional Access tab, My Apps sign-in, CA008 = Report-only: Success
-- `CA008-policy.json` — exported policy definition
-
+- [CA008-policy.json](../policies/CA008-policy.json) — exported policy definition
 ![CA008 evaluates successfully for a redeemed guest](../screenshots/ca008-guest-report-only-success.png)
 
 ---
@@ -123,12 +120,18 @@ After completing MFA registration and fully landing as a redeemed guest, a secon
 **Actual result:** What-If confirmed CA006 under "Policies that will apply" with grant control "Require multifactor authentication" for the high sign-in risk simulation, and under "Policies that will not apply" for the no-risk simulation. CA007 showed under "Policies that will apply" with grant controls "Require multifactor authentication" and "Require password change" for the high user risk simulation, and under "Policies that will not apply" for the no-risk simulation.
 
 **Evidence:**
+<<<<<<< HEAD
 ![CA006 requires MFA on high sign-in risk](../screenshots/ca006-highrisk-mfa.png)
 ![CA006 does not apply with no sign-in risk](../screenshots/ca006-norisk-unaffected.png)
 ![CA007 requires MFA and password change on high user risk](../screenshots/ca007-userrisk-mfa-passwordchange.png)
 ![CA007 does not apply with no user risk](../screenshots/ca007-norisk-unaffected.png)
 - [CA006-policy.json](../policies/CA006-policy.json) — exported policy definition
 - [CA007-policy.json](../policies/CA007-policy.json) — exported policy definition
+=======
+[CA005-policy.json](../policies/CA005-policy.json) — exported policy definition
+![CA005 blocks sign-in from an untrusted location](../screenshots/ca005-untrusted-blocked.png)
+![CA005 does not affect sign-in from a trusted location](../screenshots/ca005-trusted-allowed.png)
+>>>>>>> d89ef68926d27e0faa42799cea73ccc0769d5c9c
 
 **Business takeaway:**
 Risk-based policies let the system respond proportionally instead of applying one blunt rule to every situation — a step-up MFA challenge for a merely unusual sign-in, versus a forced credential reset when there's stronger evidence an account is actually compromised (e.g. credentials found in a known breach). This layer catches threats that static rules like location or device checks can miss entirely.
