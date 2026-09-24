@@ -1,4 +1,3 @@
-
 ## Scenario 1 — Employee challenged for MFA with none registered
 
 **Policy:** CA001 - Require MFA for all users
@@ -75,7 +74,8 @@ Legacy protocols can only send a username and password — there's no mechanism 
 
 Even if an admin's password and regular MFA are phished, this policy prevents sign-in without a phishing-resistant method.
 This closes a gap where privileged accounts, if compromised via phishing, could otherwise authenticate with a simple SMS code. Requiring phishing-resistant MFA for Tier0 admins removes that path entirely.
-
+<<<<<<< HEAD
+=======
 
 ------------
 ## Scenario 4 — Guest restricted, with a redemption-flow detour
@@ -105,28 +105,32 @@ After completing MFA registration and fully landing as a redeemed guest, a secon
 ![CA008 evaluates successfully for a redeemed guest](../screenshots/ca008-guest-report-only-success.png)
 
 ---
-## Scenario 5 — Sign-in blocked from untrusted location, unaffected from trusted location
 
-**Policy:** CA005 - Block sign-in from untrusted locations
+## Scenario 5 — Risk-based access: sign-in risk vs. user risk
+
+**Policy:** CA006 - Sign-in risk-based access control / CA007 - User risk-based access control
 **Date tested:** 2026-09-21
-**Objective:** Demonstrates that sign-ins from outside a defined set of trusted countries are blocked outright, while sign-ins from trusted countries remain unaffected.
+**Objective:** Demonstrates a proportional response to risk — a risky sign-in (e.g. unusual location/behavior) triggers MFA as a step-up challenge, while a risky user (e.g. leaked credentials) triggers both MFA and a forced password reset, since it reflects higher-confidence evidence of compromise.
 
 **Setup:**
-- Named locations configured: "Trusted Countries" (company's actual country of operation) and "Common Attack Origin Countries" (used for simulation purposes only)
 - Simulated via the Conditional Access What-If tool
-- Test 1: IP address resolving to a country outside Trusted Countries
-- Test 2: IP address resolving to a country inside Trusted Countries
+- Test 1: Sign-in risk = High (CA006)
+- Test 2: Sign-in risk = No risk (CA006 contrast)
+- Test 3: User risk = High (CA007)
+- Test 4: User risk = No risk (CA007 contrast)
 
-**Expected result:** Untrusted-location sign-in blocked; trusted-location sign-in unaffected
-**Actual result:** What-If confirmed CA005 under "Policies that will apply" with grant control "Block access" for the untrusted-IP simulation, and under "Policies that will not apply" for the trusted-IP simulation.
+**Expected result:** High sign-in risk → MFA required. High user risk → MFA + password change required. No risk in either case → policy does not apply.
+**Actual result:** What-If confirmed CA006 under "Policies that will apply" with grant control "Require multifactor authentication" for the high sign-in risk simulation, and under "Policies that will not apply" for the no-risk simulation. CA007 showed under "Policies that will apply" with grant controls "Require multifactor authentication" and "Require password change" for the high user risk simulation, and under "Policies that will not apply" for the no-risk simulation.
 
 **Evidence:**
-- `CA005-policy.json` — exported policy definition
-
-![CA005 blocks sign-in from an untrusted location](../screenshots/ca005-untrusted-blocked.png)
-![CA005 does not affect sign-in from a trusted location](../screenshots/ca005-trusted-allowed.png)
+![CA006 requires MFA on high sign-in risk](../screenshots/ca006-highrisk-mfa.png)
+![CA006 does not apply with no sign-in risk](../screenshots/ca006-norisk-unaffected.png)
+![CA007 requires MFA and password change on high user risk](../screenshots/ca007-userrisk-mfa-passwordchange.png)
+![CA007 does not apply with no user risk](../screenshots/ca007-norisk-unaffected.png)
+- [CA006-policy.json](../policies/CA006-policy.json) — exported policy definition
+- [CA007-policy.json](../policies/CA007-policy.json) — exported policy definition
 
 **Business takeaway:**
-Location-based blocking adds a layer of defense against credential theft or account takeover attempts originating from regions with no legitimate business reason to access company systems — a common pattern in real-world attacks using stolen credentials from unrelated breaches.
+Risk-based policies let the system respond proportionally instead of applying one blunt rule to every situation — a step-up MFA challenge for a merely unusual sign-in, versus a forced credential reset when there's stronger evidence an account is actually compromised (e.g. credentials found in a known breach). This layer catches threats that static rules like location or device checks can miss entirely.
 
 ---
