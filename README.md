@@ -14,7 +14,6 @@ One core aspect of Identity and Access Management is the Zero-Trust. Most breach
 
 ## Architecture
 
-![Architecture diagram](diagrams/architecture.png)
 
 *[Four signal types : identity, device, location, and sign-in risk feed into Conditional Access, which evaluates them in real time and returns one of three outcomes: allow, challenge (step-up MFA), or block.]*
 
