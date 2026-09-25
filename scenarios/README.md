@@ -1,23 +1,29 @@
 ## Scenario 1 — Employee challenged for MFA with none registered
 
 **Policy:** CA001 - Require MFA for all users
+
 **Date tested:** 2026-09-19
+
 **Objective:** Demonstrates that a baseline MFA requirement correctly identifies and challenges an employee who has no MFA method registered.
 
 **Setup:**
+
 - User: Sarah Chen (test employee, no MFA registered)
+
 - Starting state: report-only mode first, then policy switched to enforcing
 
 **Expected result:** Challenged / blocked until MFA is registered
+
 **Actual result:** Report-only mode showed "Report-only: Failure" for this user (would have been blocked). After switching CA001 to On, signing in as this user triggered a live "more information required" prompt, forcing MFA registration before access was granted.
 
 **Evidence:**
+
 - <img width="1272" height="823" alt="image" src="https://github.com/user-attachments/assets/030d66de-8476-41e4-ae61-ebbd5ac459f4" />
- sign-in log, Conditional Access tab
 
-
+  sign-in log, Conditional Access tab
 
 **Business takeaway:**
+
 Requiring MFA tenant-wide closes the single most common gap exploited in real breaches — a stolen or guessed password with nothing else standing in the way.
 
 ---
@@ -25,72 +31,93 @@ Requiring MFA tenant-wide closes the single most common gap exploited in real br
 ## Scenario 2 — Legacy authentication client blocked, modern browser unaffected
 
 **Policy:** CA002 - Block legacy authentication
+
 **Date tested:** 2026-09-19
+
 **Objective:** Demonstrates that legacy authentication protocols (IMAP/POP/older SMTP, which can't support MFA at all) are blocked outright, while normal browser sign-ins remain unaffected.
 
 **Setup:**
+
 - Simulated via the Conditional Access What-If tool (no real legacy client available)
+
 - Test 1: Client apps = "Other clients" (represents legacy protocols)
+
 - Test 2: Client apps = "Browser" (represents normal modern sign-in)
 
 **Expected result:** Legacy client blocked; browser sign-in unaffected
+
 **Actual result:** What-If confirmed CA002 under "Policies that will apply" with grant control "Block access" for the legacy client simulation, and under "Policies that will not apply" for the browser simulation.
 
 **Evidence:**
-<img width="1509" height="824" alt="image" src="https://github.com/user-attachments/assets/0c74578a-1376-4cd2-8281-f07f3b6c9de3" />
- What-If result, legacy client
 
+<img width="1509" height="824" alt="image" src="https://github.com/user-attachments/assets/0c74578a-1376-4cd2-8281-f07f3b6c9de3" />
+
+What-If result, legacy client
 
 ![CA002 blocks legacy client](../screenshots/ca002-legacy-blocked.png)
 
 **Business takeaway:**
+
 Legacy protocols can only send a username and password — there's no mechanism for them to respond to an MFA challenge — making them a favorite target for credential-stuffing attacks. Blocking them outright, rather than trying to "challenge" them, is the only meaningful control.
 
 ---
-----------
-## [Scenario 3] —  Admin blocked without phishing-resistant auth 
 
-**Policy:** CA004 - Require phishing-resistant MFA for Tier0 admins 
-**Date tested:** 9/19/2026
-**Objective:** Demonstrates that privileged accounts must use FIDO2/Windows Hello/certificate-based auth, not SMS or regular push MFA
+## Scenario 3 — Admin blocked without phishing-resistant auth
+
+**Policy:** CA004 - Require phishing-resistant MFA for Tier0 admins
+
+**Date tested:** 2026-09-19
+
+**Objective:** Demonstrates that privileged accounts must use FIDO2/Windows Hello/certificate-based auth, not SMS or regular push MFA.
 
 **Setup:**
+
 - User: YounoussK / Security Engineer
-- Starting state:  no phishing-resistant method registered
+
+- Starting state: no phishing-resistant method registered
 
 **Expected result:** Blocked/Challenged for admin, Not applied for regular employee
-**Actual result:**   Conditional Access: CA004 enforced
+
+**Actual result:** Conditional Access: CA004 enforced
 
 **Evidence:**
-<img width="1905" height="875" alt="image" src="https://github.com/user-attachments/assets/a726716f-3e9d-43db-bb66-9b8427b3bcca" />
- for the admin user
 
- 
+<img width="1905" height="875" alt="image" src="https://github.com/user-attachments/assets/a726716f-3e9d-43db-bb66-9b8427b3bcca" />
+
+for the admin user
+
 ![CA004 does not apply to regular employee](../screenshots/ca004-employee-not-applied.png)
 
 - [CA004-policy.json](../policies/CA004-policy.json) — exported policy definition
-**Business takeaway (1–2 sentences for the README/LinkedIn):**
+
+**Business takeaway:**
 
 Even if an admin's password and regular MFA are phished, this policy prevents sign-in without a phishing-resistant method.
-This closes a gap where privileged accounts, if compromised via phishing, could otherwise authenticate with a simple SMS code. Requiring phishing-resistant MFA for Tier0 admins removes that path entirely.
-<<<<<<< HEAD
-=======
 
-------------
+This closes a gap where privileged accounts, if compromised via phishing, could otherwise authenticate with a simple SMS code. Requiring phishing-resistant MFA for Tier0 admins removes that path entirely.
+
+---
+
 ## Scenario 4 — Guest restricted, with a redemption-flow detour
 
 **Policy:** CA008 - Guest and external user restrictions
+
 **Date tested:** 2026-09-20
+
 **Objective:** Demonstrates that guest/external accounts are required to complete MFA and are subject to shorter sign-in frequency than regular employees.
 
 **Setup:**
+
 - User: MyGuest (test guest account, invited via B2B collaboration)
+
 - Starting state: freshly invited, no MFA method registered
 
 **Expected result:** Guest challenged for MFA and subject to session restrictions
+
 **Actual result:** More interesting than expected — see the twist below
 
 **What actually happened:**
+
 The first sign-in attempt landed on the **Microsoft Invitation Acceptance Portal** (the app guests hit mid-redemption, before they're fully provisioned as a guest in the tenant). This attempt showed status **"Interrupted"**, with the reason "user was presented options to provide contact options so they can do MFA"; and critically, **CA008 did not appear at all** in this sign-in's Conditional Access tab, only CA001 (MFA for all users) and CA004 (not applied, correctly, since this account isn't a Tier0 admin).
 
 After completing MFA registration and fully landing as a redeemed guest, a second, fresh sign-in to **My Apps** showed CA008 correctly evaluating with result **"Report-only: Success"**, along with the expected grant control (Require MFA) and session control (Sign-in frequency).
@@ -98,7 +125,9 @@ After completing MFA registration and fully landing as a redeemed guest, a secon
 **Takeaway:** Conditional Access evaluation for guests can differ depending on which stage of the B2B redemption flow they're in — a policy scoped to "Guest or external users" may not evaluate identically during the invitation-acceptance step itself versus a normal resource sign-in afterward. Worth testing against a fully-redeemed guest, not just the initial invite acceptance, to get an accurate picture of enforcement.
 
 **Evidence:**
+
 - [CA008-policy.json](../policies/CA008-policy.json) — exported policy definition
+
 ![CA008 evaluates successfully for a redeemed guest](../screenshots/ca008-guest-report-only-success.png)
 
 ---
@@ -106,34 +135,83 @@ After completing MFA registration and fully landing as a redeemed guest, a secon
 ## Scenario 5 — Risk-based access: sign-in risk vs. user risk
 
 **Policy:** CA006 - Sign-in risk-based access control / CA007 - User risk-based access control
+
 **Date tested:** 2026-09-21
+
 **Objective:** Demonstrates a proportional response to risk — a risky sign-in (e.g. unusual location/behavior) triggers MFA as a step-up challenge, while a risky user (e.g. leaked credentials) triggers both MFA and a forced password reset, since it reflects higher-confidence evidence of compromise.
 
 **Setup:**
+
 - Simulated via the Conditional Access What-If tool
+
 - Test 1: Sign-in risk = High (CA006)
+
 - Test 2: Sign-in risk = No risk (CA006 contrast)
+
 - Test 3: User risk = High (CA007)
+
 - Test 4: User risk = No risk (CA007 contrast)
 
 **Expected result:** High sign-in risk → MFA required. High user risk → MFA + password change required. No risk in either case → policy does not apply.
+
 **Actual result:** What-If confirmed CA006 under "Policies that will apply" with grant control "Require multifactor authentication" for the high sign-in risk simulation, and under "Policies that will not apply" for the no-risk simulation. CA007 showed under "Policies that will apply" with grant controls "Require multifactor authentication" and "Require password change" for the high user risk simulation, and under "Policies that will not apply" for the no-risk simulation.
 
 **Evidence:**
-<<<<<<< HEAD
+
 ![CA006 requires MFA on high sign-in risk](../screenshots/ca006-highrisk-mfa.png)
+
 ![CA006 does not apply with no sign-in risk](../screenshots/ca006-norisk-unaffected.png)
+
 ![CA007 requires MFA and password change on high user risk](../screenshots/ca007-userrisk-mfa-passwordchange.png)
+
 ![CA007 does not apply with no user risk](../screenshots/ca007-norisk-unaffected.png)
+
 - [CA006-policy.json](../policies/CA006-policy.json) — exported policy definition
+
 - [CA007-policy.json](../policies/CA007-policy.json) — exported policy definition
-=======
-[CA005-policy.json](../policies/CA005-policy.json) — exported policy definition
-![CA005 blocks sign-in from an untrusted location](../screenshots/ca005-untrusted-blocked.png)
-![CA005 does not affect sign-in from a trusted location](../screenshots/ca005-trusted-allowed.png)
->>>>>>> d89ef68926d27e0faa42799cea73ccc0769d5c9c
 
 **Business takeaway:**
+
 Risk-based policies let the system respond proportionally instead of applying one blunt rule to every situation — a step-up MFA challenge for a merely unusual sign-in, versus a forced credential reset when there's stronger evidence an account is actually compromised (e.g. credentials found in a known breach). This layer catches threats that static rules like location or device checks can miss entirely.
 
 ---
+
+## Scenario 6 — Device compliance required for resource access
+
+**Policy:** CA003 - Require compliant or hybrid-joined devices
+
+**Date tested:** 2026-09-25
+
+**Objective:** Demonstrates that access to company resources can be restricted to devices that satisfy the organization's device-trust requirements, specifically compliant or Microsoft Entra hybrid-joined devices.
+
+**Setup:**
+
+- Simulated via the Conditional Access What-If tool
+
+- Test user: regular employee
+
+- Policy scope: regular employees
+
+- Break-glass / administrative accounts excluded from the policy
+
+- Device condition configured to require a compliant device or Microsoft Entra hybrid-joined device
+
+**Expected result:** CA003 should apply to regular employees accessing company resources and require the device to satisfy the configured device-trust condition. Excluded break-glass/administrative accounts should not be affected by the policy.
+
+**Actual result:** What-If confirmed that CA003 was correctly scoped to regular employees and that the excluded break-glass/administrative accounts were not targeted by the policy.
+
+Full enforcement testing against a genuinely non-compliant device was **out of scope for this lab** because Microsoft Intune device enrollment and compliance policies were not configured in the test environment. Therefore, this scenario validates the Conditional Access policy's targeting and configuration, but does not claim to have demonstrated an actual block of a non-compliant device.
+
+**Known limitation / next step:**
+
+A production implementation should integrate Microsoft Intune, enroll test devices, configure device compliance policies, and validate the complete enforcement path using compliant, non-compliant, and hybrid-joined devices.
+
+**Evidence:**
+
+- [CA003-policy.json](../policies/CA003-policy.json) — exported policy definition
+
+- CA003 What-If result — confirms policy scope and excluded accounts
+
+**Business takeaway:**
+
+Identity alone is not enough to establish trust. Requiring compliant or hybrid-joined devices adds a device-trust layer so that a valid user account cannot automatically access company resources from an unmanaged or non-compliant endpoint.
