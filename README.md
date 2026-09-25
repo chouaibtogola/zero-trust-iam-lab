@@ -10,7 +10,7 @@ I am pretty much delved within the realm of protecting systems from malicious ac
 
 One core aspect of Identity and Access Management is the Zero-Trust. Most breaches occur due to giving more than enough privileges to accounts , which the latter if by any unfortunate mean are compromised, get leveraged by attackers to have access to confidential data and compromise the entire integrity of a system. 
 
-
+![Zero Trust Conditional Access architecture](../diagrams/zero_trust_ca_architecture_large.svg)
 
 ## Architecture
 
