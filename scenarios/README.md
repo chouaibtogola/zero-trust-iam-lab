@@ -215,3 +215,35 @@ A production implementation should integrate Microsoft Intune, enroll test devic
 **Business takeaway:**
 
 Identity alone is not enough to establish trust. Requiring compliant or hybrid-joined devices adds a device-trust layer so that a valid user account cannot automatically access company resources from an unmanaged or non-compliant endpoint.
+
+---
+
+## Scenario 7 — Privileged role activation via PIM
+
+**Control:** Privileged Identity Management (PIM) — eligible assignment for Global Administrator
+
+**Date tested:** 2026-09-29
+
+**Objective:** Demonstrates least-privilege administration — privileged accounts hold no standing/permanent access, and must explicitly activate their role, with MFA and a documented justification, before gaining it. Activated access is time-limited and automatically reverts.
+
+**Setup:**
+
+- User: Tier0 admin test account (Aminata Keita), assigned as PIM-eligible (not permanent/active) for the Global Administrator role
+
+- Role settings configured to require Azure MFA and a justification on activation
+
+**Expected result:** The user has no standing Global Administrator access by default. Activation requires re-authentication (MFA) and a justification, and is logged with a timestamp. Access expires automatically after the activation window closes.
+
+**Actual result:** Signed in as the eligible test admin and activated Global Administrator via PIM's "My roles" screen, providing a justification and completing an MFA challenge. The activation appeared in PIM's audit history with the correct timestamp, user, and justification text. The role reverted to eligible-only (no standing access) once the activation window expired.
+
+**Evidence:**
+
+![PIM role activation with MFA and justification](../screenshots/pim-activation.png)
+
+![PIM audit history showing the activation event](../screenshots/pim-audit-log.png)
+
+**Business takeaway:**
+
+Standing privileged access is one of the highest-value targets in any breach — compromising a permanent Global Administrator account gives an attacker unrestricted, indefinite access. PIM removes this risk by making privileged access temporary, justified, and auditable by default rather than always-on, and provides a clear audit trail of exactly who had elevated access, when, and why.
+
+---
