@@ -247,3 +247,36 @@ Identity alone is not enough to establish trust. Requiring compliant or hybrid-j
 Standing privileged access is one of the highest-value targets in any breach — compromising a permanent Global Administrator account gives an attacker unrestricted, indefinite access. PIM removes this risk by making privileged access temporary, justified, and auditable by default rather than always-on, and provides a clear audit trail of exactly who had elevated access, when, and why.
 
 ---
+
+##  Scenario 8 — Recurring access review for guest and contractor access
+
+Control: Microsoft Entra Identity Governance — Access Reviews
+
+Date tested: 2026-10-01
+
+Objective: Demonstrates periodic access recertification by ensuring guest and contractor accounts retain access only when it is still required. Recurring reviews help prevent external access from accumulating indefinitely without confirmation from an authorized reviewer.
+
+Setup:
+
+Review scope: Contractor/guest group
+Review frequency: Quarterly
+Reviewer: Designated reviewer responsible for confirming continued access
+Review duration: 14 days
+Auto-apply results: Configured to remove access when not approved, including cases where the reviewer does not respond
+
+Expected result: The access review is configured to run quarterly, with a designated reviewer responsible for confirming whether external users still require access. Users whose access is not approved, including those receiving no response, are subject to automatic removal when the review results are applied.
+
+Actual result: Created and verified the access review configuration in the Microsoft Entra portal. Confirmed the review scope, quarterly recurrence, designated reviewer, and automatic removal behavior for unapproved or unanswered reviews.
+
+Known limitation: The full 14-day review cycle was not completed within the lab timeframe. This scenario demonstrates successful configuration and scheduling of the recurring access review, rather than a completed end-to-end review outcome or verified removal of an actual guest account.
+
+Evidence:
+
+
+![Access review configuration](../screenshots/access-review-config.png)
+
+Business takeaway:
+
+Access granted once but never periodically re-confirmed tends to accumulate over time, particularly for contractors whose projects have ended and external guests who no longer require access. Recurring access reviews with automatic removal establish an ongoing governance process, ensuring external access remains justified rather than relying on one-time approval decisions that are never revisited.
+
+---
